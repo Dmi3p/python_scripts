@@ -39,13 +39,14 @@ def smpl_finder(text):
 
 
 def main():
-    text = from_file(sys.argv[1])
+    #text = from_file(sys.argv[1])
+    text = from_file('generator.txt')
     time_step = time_step_finder(text)
     voltage_step = voltage_step_finder(text)
     zero_level = zero_level_finder(text)
     smpl = smpl_finder(text)
 
-    print(time_step, voltage_step, zero_level, len(smpl))
+    print(time_step, voltage_step, zero_level, type(smpl[10]))
 
 if __name__ == '__main__':
     main()
