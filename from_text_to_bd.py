@@ -1,4 +1,5 @@
 import sys
+import sqlite3
 
 
 def from_file(file):
@@ -37,7 +38,6 @@ def smpl_finder(text):
         i+=1
     return list2
 
-
 def main():
     #text = from_file(sys.argv[1])
     text = from_file('generator.txt')
@@ -45,8 +45,14 @@ def main():
     voltage_step = voltage_step_finder(text)
     zero_level = zero_level_finder(text)
     smpl = smpl_finder(text)
+    pack_to_sql = (time_step, voltage_step, zero_level, smpl[0])
 
-    print(time_step, voltage_step, zero_level, type(smpl[10]))
+   # conn = sqlite3.connect("samples.db")
+    #cursor = conn.cursor()
+    #cursor.executemany("INSERT INTO samples VALUES (?,?,?,?,?)", pack_to_sql )
+    #conn.commit()
+
+    print(time_step, voltage_step, zero_level, type(smpl[0]))
 
 if __name__ == '__main__':
     main()
