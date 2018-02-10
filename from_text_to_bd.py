@@ -10,21 +10,19 @@ def from_file(file):
 
 
 def time_step_finder(text):
-    string = text[1]
-    value = string[12:17].replace(",",".")
+    value = text[1].split(" ")[3].replace(",",".")
     return float(value)
 
 
 def voltage_step_finder(text):
-    string = str(text[2])
-    value = string[15:20].replace(",",".")
+    value = str(text[2]).split(" ")[3].replace(",",".")
     return float(value)
 
 
 def zero_level_finder(text):
-    string = str(text[3])
-    value = string[13:]
+    value = str(text[3]).split(" ")[3].replace(",",".")
     return int(value)
+
 
 
 def smpl_finder(text):
