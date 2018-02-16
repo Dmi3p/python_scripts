@@ -43,14 +43,10 @@ def main():
     voltage_step = voltage_step_finder(text)
     zero_level = zero_level_finder(text)
     smpl = smpl_finder(text)
-    pack_to_sql = (time_step, voltage_step, zero_level, smpl[0])
 
-   # conn = sqlite3.connect("samples.db")
-    #cursor = conn.cursor()
-    #cursor.executemany("INSERT INTO samples VALUES (?,?,?,?,?)", pack_to_sql )
-    #conn.commit()
 
-    print(time_step, voltage_step, zero_level, type(smpl[0]))
+
+    print("Временной шаг:", time_step, "nS\nНапряжение:", voltage_step, "mV\nЗемля:", zero_level, "\nМассив:", smpl[3999])
 
 if __name__ == '__main__':
     main()
