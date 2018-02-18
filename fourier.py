@@ -35,7 +35,7 @@ def main():
     voltage_step = value_getter(text, 2)
     zero_level = value_getter(text, 3)
     smpl = smpl_finder(text)
-    FD = 22050
+    FD = 83300
     LEN = len(smpl)
     spectrum = rfft(smpl)
     list_spectrum_real = []
@@ -83,7 +83,7 @@ def main():
             plt.grid(True)
             plt.show()
 
-            plt.plot(rfftfreq(LEN, 1. / FD), np_abs(list_spectrum_real) / (LEN))
+            plt.plot(rfftfreq(LEN, 1. / FD), np_abs(spectrum) / (LEN))
             plt.xlabel('Частота, Гц')
             plt.ylabel('Напряжение, мВ')
             plt.title('Спектр')
