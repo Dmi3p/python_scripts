@@ -53,15 +53,15 @@ def main():
     while counter < len(spectrum):
         test_list.append(complex(list_spectrum_real[counter], list_spectrum_imag[counter]))
         counter += 1
-    ''' 
+
     counter_1 = 0
-     while counter_1 < len(spectrum):
+    while counter_1 < len(spectrum):
         if spectrum[counter_1] != test_list[counter_1]:
             print("Error")
         else:
             pass
-    counter_1 += 1
-    '''
+        counter_1 += 1
+
     conn = psycopg2.connect(database="diplom", user="postgres", password="12Qwer34", host="127.0.0.1", port="5432")
     print('connection on')
 
