@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 from numpy.fft import rfft, rfftfreq, fft
 from numpy import array, arange, abs as np_abs
 import sys
+import psycopg2
+
+
 def from_file(file):
     f = open(file, "r")
     text = f.read()
@@ -9,19 +12,9 @@ def from_file(file):
     return text.split("\n")
 
 
-def time_step_finder(text):
-    value = text[1].split(" ")[3].replace(",", ".")
+def value_getter(text, position):
+    value = str(text[position]).split(" ")[3].replace(",", ".")
     return float(value)
-
-
-def voltage_step_finder(text):
-    value = str(text[2]).split(" ")[3].replace(",", ".")
-    return float(value)
-
-
-def zero_level_finder(text):
-    value = str(text[3]).split(" ")[3].replace(",", ".")
-    return int(value)
 
 
 def smpl_finder(text):
@@ -37,31 +30,41 @@ def smpl_finder(text):
 
 
 def main():
-
     text = from_file(sys.argv[1])
-    time_step = time_step_finder(text)
-    voltage_step = voltage_step_finder(text)
-    zero_level = zero_level_finder(text)
+    time_step = value_getter(text, 1)
+    voltage_step = value_getter(text, 2)
+    zero_level = value_getter(text, 3)
     smpl = smpl_finder(text)
     FD = 22050
-    N = len(smpl)
+    LEN = len(smpl)
     spectrum = rfft(smpl)
 
-    plt.plot(arange(N) / float(FD), smpl)  # по оси времени секунды!
-    plt.xlabel('Время, c')
-    plt.ylabel('Напряжение, мВ')
-    plt.title('Сигнал')
-    plt.grid(True)
-    plt.show()
+    conn = psycopg2.connect(database="diplom", user="postgres", password="12Qwer34", host="127.0.0.1", port="5432")
+    print('connection on')
 
-    plt.plot(rfftfreq(N, 1. / FD), np_abs(spectrum)/(N))
-    plt.xlabel('Частота, Гц')
-    plt.ylabel('Напряжение, мВ')
-    plt.title('Спектр')
-    plt.grid(True)
-    plt.show()
-    #print(time_step, voltage_step, zero_level, type(fourier), fourier)
-    print (type(np_abs(spectrum)/(N)))
+    cur = conn.cursor()
+    cur.execute("INSERT INTO examples_1 (TIME_STEP, VOLTAGE_STEP, ZERO_LEVEL, FD, LEN, SMPL)  "
+                "VALUES (%s, %s, %s, %s, %s, %s) ",
+                (time_step, voltage_step, zero_level, FD, LEN, smpl))
+    conn.commit()
+    conn.close()
+    print("Data successfully executed!!")
+    if len (sys.argv) > 2:
+        plt.plot(arange(LEN) / float(FD), smpl)  # по оси времени секунды!
+        plt.xlabel('Время, c')
+        plt.ylabel('Напряжение, мВ')
+        plt.title('Сигнал')
+        plt.grid(True)
+        plt.show()
+
+        plt.plot(rfftfreq(LEN, 1. / FD), np_abs(spectrum) / (LEN))
+        plt.xlabel('Частота, Гц')
+        plt.ylabel('Напряжение, мВ')
+        plt.title('Спектр')
+        plt.grid(True)
+        plt.show()
+    else:
+        pass
+
 if __name__ == '__main__':
     main()
-

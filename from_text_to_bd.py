@@ -1,28 +1,12 @@
-import sys
-import sqlite3
-
-
 def from_file(file):
     f = open(file, "r")
     text =f.read()
     f.close()
     return text.split("\n")
 
-
-def time_step_finder(text):
-    value = text[1].split(" ")[3].replace(",",".")
+def value_getter(text, position):
+    value = str(text[position]).split(" ")[3].replace(",", "." )
     return float(value)
-
-
-def voltage_step_finder(text):
-    value = str(text[2]).split(" ")[3].replace(",",".")
-    return float(value)
-
-
-def zero_level_finder(text):
-    value = str(text[3]).split(" ")[3].replace(",",".")
-    return int(value)
-
 
 
 def smpl_finder(text):
@@ -37,16 +21,13 @@ def smpl_finder(text):
     return list2
 
 def main():
-    #text = from_file(sys.argv[1])
     text = from_file('generator.txt')
-    time_step = time_step_finder(text)
-    voltage_step = voltage_step_finder(text)
-    zero_level = zero_level_finder(text)
+    time_step = value_getter(text, 1)
+    voltage_step = value_getter(text, 2)
+    zero_level = value_getter(text, 3)
     smpl = smpl_finder(text)
-
-
-
     print("Временной шаг:", time_step, "nS\nНапряжение:", voltage_step, "mV\nЗемля:", zero_level, "\nМассив:", smpl[3999])
 
 if __name__ == '__main__':
     main()
+
